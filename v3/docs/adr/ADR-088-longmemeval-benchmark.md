@@ -225,19 +225,30 @@ The benchmark surfaces clear, ordered targets. Each item lists the metric it sho
 
 ### Tier 1 — Retrieval quality (reordered after the 2026-05-01b ablation)
 
-1. **Hybrid sparse+dense retrieval (BM25 + dense via RRF).** *[Was #3 — promoted after MiniLM lost to hash on Content@k.]*
+1. **Hybrid sparse+dense retrieval (BM25 + dense via RRF).** *[Was #3 — promoted after MiniLM lost to hash on Content@k.]* **Status: implemented and run. Hybrid hash is now best raw on Content@k.**
    - BM25 IS lexical retrieval done properly: full-document scoring with TF-IDF and length normalization, not opportunistic token overlap. It directly rewards the lexical-substring metric the bench currently uses.
-   - Combine with dense (MiniLM or bge-large) via Reciprocal Rank Fusion (RRF). SmartRetrieval already has RRF infrastructure for multi-query — extend to dense+sparse.
-   - Expected: +3–8 pp on Content@1 broadly, with bigger wins on `multi-session` and `temporal-reasoning` (categories where dense currently loses ground).
+   - Combine with dense via Reciprocal Rank Fusion (RRF). SmartRetrieval already has RRF infrastructure for multi-query — extend to dense+sparse.
+   - **Actuals (n=500, k=10):**
+     | Run | C@1 | C@3 | C@k | MRR |
+     |---|---|---|---|---|
+     | Hash raw (baseline) | 22.2% | 35.8% | 43.6% | 0.2967 |
+     | Hash smart | 24.6% | 34.6% | 43.2% | 0.3058 |
+     | BM25 only (hash) | 23.4% | 36.0% | 43.8% | 0.3056 |
+     | **Hybrid (hash + BM25)** | **24.2%** | **38.0%** | **43.8%** | **0.3129** |
+     | Hybrid (MiniLM + BM25) | 21.8% | 35.6% | 44.6% | 0.2975 |
+     | Hybrid (MiniLM + BM25, RRF k=10) | 21.4% | 35.2% | 44.4% | 0.2936 |
+   - **Read:** Hybrid-hash is the best raw run by Content@3 (+2.2 pp over raw, +3.4 pp over smart) and MRR (+0.016 over raw). Gains are smaller than the +3–8 pp originally projected. **Hybrid does not rescue MiniLM** — dense-MiniLM hybrid still loses to hash hybrid on every Content@k metric. The semantic encoder is genuinely a worse fit for this lexical-substring metric, with or without BM25 fusion.
+   - Next: combine **hybrid + smart** (BM25 + dense via RRF + the smart pipeline's recency / MMR / session-RR layer) — not yet run. Expected to stack: smart's pipeline gain (~+2 pp C@1) on top of hybrid's gain (~+2 pp C@1).
 
 2. **Smarter chunking with sentence boundaries + question-style overlap.**
    - Today the harness chunks at session boundaries. Many `single-session-preference` answers live mid-message and get diluted (currently 0% across both encoders and both pipelines — a structural failure, not a ranking failure).
    - Use semantic-aware chunking (e.g., `semchunk` with a 256-token window, 64-token overlap, sentence boundaries). Index every chunk; score sessions by max-chunk score.
    - Expected: +2–5 pp on Content@1 across all categories, big gains on `single-session-preference` specifically.
 
-3. **Upgrade embedding model — *deferred* until after Tier 1 #1 lands.** *[Was #1.]*
-   - Candidates: `nomic-embed-text-v1.5` (768d), `bge-large-en-v1.5` (1024d), `Qwen3-Embedding-0.6B` (1024d, multilingual). Already supported by ONNX runtime; just swap the model card.
-   - Caveat from the ablation: dense encoders alone underperform hash on this lexical-substring metric. Their value materializes when paired with BM25 in a hybrid, or when graded against a semantic-aware metric (Tier 4 #13). Don't ship the swap before #1.
+3. **Upgrade embedding model — *blocked* on getting fair credit for semantic matches.** *[Was #1.]*
+   - Candidates: `nomic-embed-text-v1.5` (768d), `bge-large-en-v1.5` (1024d), `Qwen3-Embedding-0.6B` (1024d, multilingual).
+   - **Updated caveat from the 2026-05-01b ablation:** MiniLM lost on every Content@k metric, AND hybrid (BM25+MiniLM) is also worse than hybrid (BM25+hash). The Content@k metric simply does not reward semantic-only matches. A bigger semantic encoder will most likely make this *worse*, not better.
+   - **Prerequisite:** Tier 4 #13 (LLM-graded `evaluate_qa.py`) needs to be wired up before this swap can be evaluated fairly. Until then, deferring this item to "after we have a metric that can credit a paraphrase as a hit."
    - Cost: ~3x larger index, ~2x ingest time. Mitigated by Int8 quantization (ADR-076).
 
 ### Tier 2 — Pipeline tuning (smaller gains, free metrics)
