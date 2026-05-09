@@ -20,6 +20,11 @@ export {
   type BreakerDecision,
   type SendOutcome,
 } from './application/federation-breaker-service.js';
+export {
+  InMemorySpendReporter,
+  type SpendReporter,
+  type FederationSpendEvent,
+} from './application/spend-reporter.js';
 export { FederationSession, type FederationSessionProps, type SessionMetrics } from './domain/entities/federation-session.js';
 export {
   FederationEnvelope,

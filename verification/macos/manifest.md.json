@@ -1,8 +1,8 @@
 {
   "manifest": {
     "schema": "ruflo-witness/v1",
-    "issuedAt": "2026-05-09T20:12:00.966Z",
-    "gitCommit": "c6274cce87a9f07586207a4675de968dbb131bd8",
+    "issuedAt": "2026-05-09T20:19:35.445Z",
+    "gitCommit": "4cec8f03391c027d9d1a22430486f2edac4e0714",
     "branch": "feat/adr-100-promote-097-phase2",
     "os": "macos",
     "releases": {
@@ -12,8 +12,8 @@
       "@claude-flow/memory": "3.0.0-alpha.15"
     },
     "summary": {
-      "totalFixes": 89,
-      "verified": 89,
+      "totalFixes": 90,
+      "verified": 90,
       "missing": 0
     },
     "fixes": [
@@ -709,7 +709,7 @@
         "id": "ADR-097-Phase2b-coordinator",
         "desc": "Coordinator outbound short-circuit on !peer.isActive (companion to ADR-097-Phase2b) — refuses sends to SUSPENDED/EVICTED peers before session lookup, no remaining-budget echo",
         "file": "v3/@claude-flow/plugin-agent-federation/dist/application/federation-coordinator.js",
-        "sha256": "86d44cfe20ce08ff1c0254e077decc1f040eb35d2d0499c45a891eed7fced02f",
+        "sha256": "1a9c97af857198e7b36188e80823990242fc9fc2e472c30922ed6101d0a59d34",
         "marker": "PEER_EVICTED",
         "markerVerified": true
       },
@@ -717,7 +717,7 @@
         "id": "ADR-097-Phase4-mcp",
         "desc": "Federation Phase 4 operator surface: 3 new MCP tools (federation_breaker_status, federation_evict, federation_reactivate) for inspecting and operating the per-peer circuit breaker",
         "file": "v3/@claude-flow/plugin-agent-federation/dist/mcp-tools.js",
-        "sha256": "504ebeb1a5b1a9419aa7d5e522bf98fcbdec4762759f343148047ff8162e6b5e",
+        "sha256": "ebf0fb81c3bd255057a61c0590aa9561c8071c9685d394122e20b7d02b1ab097",
         "marker": "federation_breaker_status",
         "markerVerified": true
       },
@@ -728,15 +728,23 @@
         "sha256": "3f2860d1e24860dd17c395b11eb01509bacb22c549585935f7f7404686abc679",
         "marker": "checkFederationBreaker",
         "markerVerified": true
+      },
+      {
+        "id": "ADR-097-Phase3-upstream",
+        "desc": "Federation Phase 3 upstream — coordinator.reportSpend() with SpendReporter interface + breaker fan-out + federation_report_spend MCP tool. Closes ADR-097 100% end-to-end. Event shape matches cost-tracker consumer contract verbatim (peerId, taskId, tokensUsed, usdSpent, ts, success).",
+        "file": "v3/@claude-flow/plugin-agent-federation/dist/application/spend-reporter.js",
+        "sha256": "77276a90c163d852058b5337bb21efcc59d7eb2422fc6debe10176c08752bf51",
+        "marker": "InMemorySpendReporter",
+        "markerVerified": true
       }
     ]
   },
   "integrity": {
     "manifestHashAlgo": "sha256",
-    "manifestHash": "61f2726b6e53e7c62a5d05bba838895259a02eb32fdefe62d9a429748233aef8",
+    "manifestHash": "c1e9d306bb1b792abe3a291c5a9d3254d32d02711538d13c81be53cbfa006b6b",
     "signatureAlgo": "ed25519",
-    "publicKey": "0c2dec9236ce29223e2e88fb892282e1892e4eddd325d299383d1637f276be86",
-    "signature": "622336dd9cf66a4c8e25b3cff22eca08d80bbb78129ee556c2a07f67e0bbb3a4d5fbcc5e74a7dff1227618c941f2dbafd6e2e3487363502be6f0cdf667c1120b",
+    "publicKey": "08466691429296ec6b87177d03db4c5d81727e8d94601578e546082120f61794",
+    "signature": "793f6b42cb253acc5a39e2d022c64121ac0d108bce17a467592f5df9d04967088f11a1845b6d3a9a3d789fa7eb622811754faee5296ce9b0ac5a8de578fe120e",
     "seedDerivation": "sha256(gitCommit + ':ruflo-witness/v1')"
   }
 }

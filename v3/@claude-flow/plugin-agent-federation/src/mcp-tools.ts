@@ -306,6 +306,36 @@ export function createMcpTools(
       },
     },
     {
+      name: 'federation_report_spend',
+      description: 'ADR-097 Phase 3 upstream: report the actual cost of a completed federated call. Fans out to the cost-tracker bus (via the integrator-wired SpendReporter) and the breaker service (so its in-memory rolling buffer is fed). Both targets are optional; calling without either configured is a silent no-op.',
+      pluginName: '@claude-flow/plugin-agent-federation',
+      version: '1.0.0-alpha.1',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          peerId: { type: 'string', description: 'Peer this cost was incurred against' },
+          taskId: { type: 'string', description: 'Optional task correlation key' },
+          tokensUsed: { type: 'number', description: 'Tokens consumed (input + output)' },
+          usdSpent: { type: 'number', description: 'USD spent' },
+          success: { type: 'boolean', description: 'Whether the underlying send succeeded (drives breaker failure-ratio)' },
+          ts: { type: 'string', description: 'ISO 8601 timestamp; auto-filled if omitted' },
+        },
+        required: ['peerId', 'tokensUsed', 'usdSpent', 'success'],
+      },
+      handler: async (params) => {
+        const coordinator = requireCoordinator();
+        await coordinator.reportSpend({
+          peerId: params['peerId'] as string,
+          taskId: params['taskId'] as string | undefined,
+          tokensUsed: params['tokensUsed'] as number,
+          usdSpent: params['usdSpent'] as number,
+          success: params['success'] as boolean,
+          ts: params['ts'] as string | undefined,
+        });
+        return textResult('Spend reported');
+      },
+    },
+    {
       name: 'federation_consensus',
       description: 'Propose a federated consensus operation across all active peers',
       pluginName: '@claude-flow/plugin-agent-federation',

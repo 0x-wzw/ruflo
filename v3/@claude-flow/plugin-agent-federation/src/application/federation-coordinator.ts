@@ -19,6 +19,11 @@ import {
   enforceBudget,
   validateBudget,
 } from '../domain/value-objects/federation-budget.js';
+import type { FederationBreakerService } from './federation-breaker-service.js';
+import type {
+  FederationSpendEvent,
+  SpendReporter,
+} from './spend-reporter.js';
 
 /**
  * Optional per-call budget controls (ADR-097 Phase 1). All fields are
@@ -54,6 +59,22 @@ export interface FederationStatus {
   readonly healthy: boolean;
 }
 
+/**
+ * Optional integrations (ADR-097 Phase 3 upstream + Phase 2.b breaker
+ * wiring). Both are constructor-injected; both default to no-op.
+ *
+ * - `spendReporter` — invoked by reportSpend() when present; persists
+ *   the FederationSpendEvent to whatever backend the integrator wired
+ *   (cost-tracker bus, ruflo memory federation-spend namespace, etc.)
+ * - `breakerService` — invoked by reportSpend() when present; calls
+ *   recordOutcome() so the breaker's in-memory rolling buffer is fed
+ *   without requiring the integrator to wire two parallel pipelines
+ */
+export interface FederationCoordinatorIntegrations {
+  readonly spendReporter?: SpendReporter;
+  readonly breakerService?: FederationBreakerService;
+}
+
 export class FederationCoordinator {
   private readonly config: FederationCoordinatorConfig;
   private readonly discovery: DiscoveryService;
@@ -65,6 +86,8 @@ export class FederationCoordinator {
   private readonly policyEngine: PolicyEngine;
   private readonly sessions: Map<string, FederationSession>;
   private initialized: boolean;
+  private readonly spendReporter?: SpendReporter;
+  private readonly breakerService?: FederationBreakerService;
 
   constructor(
     config: FederationCoordinatorConfig,
@@ -75,6 +98,7 @@ export class FederationCoordinator {
     piiPipeline: PIIPipelineService,
     trustEvaluator: TrustEvaluator,
     policyEngine: PolicyEngine,
+    integrations: FederationCoordinatorIntegrations = {},
   ) {
     this.config = config;
     this.discovery = discovery;
@@ -86,6 +110,8 @@ export class FederationCoordinator {
     this.policyEngine = policyEngine;
     this.sessions = new Map();
     this.initialized = false;
+    this.spendReporter = integrations.spendReporter;
+    this.breakerService = integrations.breakerService;
   }
 
   async initialize(manifest: Omit<FederationManifest, 'signature'>): Promise<void> {
@@ -404,6 +430,59 @@ export class FederationCoordinator {
       }
     }
     return ok;
+  }
+
+  /**
+   * ADR-097 Phase 3 upstream: report the actual cost of a federated
+   * call. Federation doesn't own model pricing, so the integrator calls
+   * this after the downstream agent completes.
+   *
+   * Fans out to:
+   *   - spendReporter (if injected) — persists to integrator's backend
+   *   - breakerService.recordOutcome (if injected) — feeds the breaker's
+   *     in-memory rolling buffer for cost/failure-ratio thresholds
+   *
+   * Both are no-ops if the corresponding integration isn't wired, so
+   * callers don't need to branch on configuration. Negative tokens/usd
+   * are clamped to 0 at the breaker layer (anti-credit-inflation); the
+   * spend reporter receives the raw values so backends can audit them.
+   *
+   * Auto-fills `ts` if the caller omits it.
+   */
+  async reportSpend(input: {
+    readonly peerId: string;
+    readonly taskId?: string;
+    readonly tokensUsed: number;
+    readonly usdSpent: number;
+    readonly success: boolean;
+    readonly ts?: string;
+  }): Promise<void> {
+    const event: FederationSpendEvent = {
+      peerId: input.peerId,
+      taskId: input.taskId,
+      tokensUsed: input.tokensUsed,
+      usdSpent: input.usdSpent,
+      success: input.success,
+      ts: input.ts ?? new Date().toISOString(),
+    };
+
+    // Fan out in parallel — neither side blocks the other. Reporter
+    // failures bubble up (integrator's responsibility); breaker is
+    // sync-internally so its branch is fire-and-forget safe.
+    const tasks: Promise<void>[] = [];
+    if (this.spendReporter) {
+      tasks.push(this.spendReporter.reportSpend(event));
+    }
+    if (this.breakerService) {
+      this.breakerService.recordOutcome({
+        nodeId: event.peerId,
+        success: event.success,
+        tokensUsed: event.tokensUsed,
+        usdSpent: event.usdSpent,
+        at: new Date(event.ts),
+      });
+    }
+    if (tasks.length > 0) await Promise.all(tasks);
   }
 
   /**
