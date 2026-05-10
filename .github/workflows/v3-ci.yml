@@ -369,12 +369,16 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: v3/pnpm-lock.yaml
 
-      - name: Build cli package (static scan needs dist)
+      - name: Build packages (static scan needs cli dist)
         working-directory: v3
         shell: bash
         run: |
           pnpm install --frozen-lockfile
-          pnpm --filter @claude-flow/cli... run build
+          # Mirror witness-verify pattern — recursive + no-bail so unrelated
+          # package failures don't block this guard. The smoke script
+          # explicitly checks for memory-tools.js dist and fails loudly if
+          # the cli build itself didn't produce it.
+          pnpm --recursive --no-bail run build || true
 
       - name: Run memory-import regression guards (#1883 + #1884)
         shell: bash
