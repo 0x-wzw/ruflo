@@ -7,7 +7,7 @@
 
 use crate::envelope::Envelope;
 use std::io;
-use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader, Stdin, Stdout};
+use tokio::io::{AsyncReadExt, AsyncWriteExt, BufReader, Stdin, Stdout};
 
 /// Maximum size of a single inbound JSON line before the reader rejects it.
 /// At 1 MiB we can still carry a chart pane's full ASCII payload while

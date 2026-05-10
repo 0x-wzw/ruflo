@@ -12,11 +12,18 @@ description = "Native ratatui binary for Aperture"
 name = "aperture"
 path = "src/main.rs"
 
+[features]
+# Opt-in web-research provider. Disabled by default so the offline build
+# stays minimal and `cargo build` doesn't pull `tokio::process` in for
+# the regular dependency closure.
+provider-claude = ["dep:aperture-providers-claude"]
+
 [dependencies]
 aperture-core = { path = "../aperture-core" }
 aperture-render = { path = "../aperture-render" }
 aperture-data = { path = "../aperture-data" }
 aperture-swarm = { path = "../aperture-swarm" }
+aperture-providers-claude = { path = "../aperture-providers-claude", optional = true }
 ratatui = { workspace = true }
 crossterm = { workspace = true }
 tokio = { workspace = true }

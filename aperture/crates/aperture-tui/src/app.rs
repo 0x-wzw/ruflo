@@ -25,7 +25,17 @@ use crate::keymap_native::handle_key;
 pub async fn run(provider: &str) -> Result<()> {
     let source: Box<dyn DataSource> = match provider {
         "memory" => Box::new(MemoryDataSource),
-        other => anyhow::bail!("unknown provider: {other} (only `memory` available in v0.1)"),
+        #[cfg(feature = "provider-claude")]
+        "claude" => Box::new(aperture_providers_claude::ClaudeResearcher::new(
+            MemoryDataSource,
+        )),
+        #[cfg(not(feature = "provider-claude"))]
+        "claude" => anyhow::bail!(
+            "provider `claude` requires building with `--features provider-claude`"
+        ),
+        other => anyhow::bail!(
+            "unknown provider: {other} (known: `memory`, `claude` [feature `provider-claude`])"
+        ),
     };
 
     enable_raw_mode()?;
