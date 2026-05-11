@@ -47,6 +47,18 @@ export { CodexInitializer, initializeCodexProject } from './initializer.js';
 export { DualModeOrchestrator, CollaborationTemplates, createDualModeCommand } from './dual-mode/index.js';
 export type { DualModeConfig, WorkerConfig, WorkerResult, CollaborationResult } from './dual-mode/index.js';
 
+// Codex /loop-compatible runner
+export {
+  buildCodexLoopPrompt,
+  loadLoopState,
+  normalizeLoopName,
+  requestLoopStop,
+  resolveLoopPaths,
+  runCodexLoop,
+} from './loop/index.js';
+export { createLoopCommand } from './loop/cli.js';
+export type { LoopCommandResult, LoopEvent, LoopPaths, LoopRunOptions, LoopState } from './loop/index.js';
+
 // Template utilities
 export {
   getTemplate,

@@ -34,6 +34,11 @@
       "types": "./dist/dual-mode/index.d.ts",
       "import": "./dist/dual-mode/index.js",
       "require": "./dist/dual-mode/index.js"
+    },
+    "./loop": {
+      "types": "./dist/loop/index.d.ts",
+      "import": "./dist/loop/index.js",
+      "require": "./dist/loop/index.js"
     }
   },
   "files": [
