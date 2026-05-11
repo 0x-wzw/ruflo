@@ -144,6 +144,12 @@
       "desc": "Statusline version no longer hardcoded to V3.5/V3.6 \u2014 reads from installed @claude-flow/cli package.json at runtime via resolveBannerVersion() so UI matches `ruflo doctor` output.",
       "file": "v3/@claude-flow/cli/.claude/helpers/statusline.js",
       "marker": "resolveBannerVersion"
+    },
+    {
+      "id": "#1889",
+      "desc": "agentdb_pattern-search now has a symmetric memory-store-fallback path (tiered: semantic \u2192 substring). Previously pattern-store wrote to memory-store-fallback while pattern-search only queried ReasoningBank (always empty), so writes were silently lost. New CI smoke at plugins/ruflo-core/scripts/test-mcp-roundtrips.mjs catches the paired-tool-round-trip regression class.",
+      "file": "v3/@claude-flow/cli/dist/src/mcp-tools/agentdb-tools.js",
+      "marker": "controller: 'memory-store-fallback'"
     }
   ]
 }

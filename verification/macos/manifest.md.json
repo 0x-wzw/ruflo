@@ -1,8 +1,8 @@
 {
   "manifest": {
     "schema": "ruflo-witness/v1",
-    "issuedAt": "2026-05-11T03:27:40.673Z",
-    "gitCommit": "f46450538bb99574287444e73ddd0f16fdda2c55",
+    "issuedAt": "2026-05-11T04:06:43.232Z",
+    "gitCommit": "e76ddd215c3c2b514613376f494c75605c3d7787",
     "branch": "fix/1896-audit-gaps",
     "os": "macos",
     "releases": {
@@ -12,8 +12,8 @@
       "@claude-flow/memory": "3.0.0-alpha.15"
     },
     "summary": {
-      "totalFixes": 102,
-      "verified": 102,
+      "totalFixes": 103,
+      "verified": 103,
       "missing": 0
     },
     "fixes": [
@@ -45,7 +45,7 @@
         "id": "F4",
         "desc": "agentdb_pattern-store memory-store fallback",
         "file": "v3/@claude-flow/cli/dist/src/mcp-tools/agentdb-tools.js",
-        "sha256": "e0d00e4847c3a895430d7762fda100884f2df3f70714d4a3601ad6109d701494",
+        "sha256": "666141cf59c2e75c9f65fe50eff85076a96d820bddceaba79c0b67a4469b3bb5",
         "marker": "memory-store-fallback",
         "markerVerified": true
       },
@@ -245,7 +245,7 @@
         "id": "CAP-MCP-agentdb-tools",
         "desc": "MCP tools (15): agentdb_batch, agentdb_causal-edge, agentdb_consolidate, …",
         "file": "v3/@claude-flow/cli/dist/src/mcp-tools/agentdb-tools.js",
-        "sha256": "e0d00e4847c3a895430d7762fda100884f2df3f70714d4a3601ad6109d701494",
+        "sha256": "666141cf59c2e75c9f65fe50eff85076a96d820bddceaba79c0b67a4469b3bb5",
         "marker": "agentdb_batch",
         "markerVerified": true
       },
@@ -832,15 +832,23 @@
         "sha256": "393ecd3800f6cea1687e92afc383a6c3050dd4fb6774f2e28123f602bef807af",
         "marker": "resolveBannerVersion",
         "markerVerified": true
+      },
+      {
+        "id": "#1889",
+        "desc": "agentdb_pattern-search now has a symmetric memory-store-fallback path (tiered: semantic → substring). Previously pattern-store wrote to memory-store-fallback while pattern-search only queried ReasoningBank (always empty), so writes were silently lost. New CI smoke at plugins/ruflo-core/scripts/test-mcp-roundtrips.mjs catches the paired-tool-round-trip regression class.",
+        "file": "v3/@claude-flow/cli/dist/src/mcp-tools/agentdb-tools.js",
+        "sha256": "666141cf59c2e75c9f65fe50eff85076a96d820bddceaba79c0b67a4469b3bb5",
+        "marker": "controller: 'memory-store-fallback'",
+        "markerVerified": true
       }
     ]
   },
   "integrity": {
     "manifestHashAlgo": "sha256",
-    "manifestHash": "a3432b41be1927852d44fe418c3ada3970430a9df29e420181156882e218c89d",
+    "manifestHash": "28866fdf3dfa2015ea16cd0ce7b7c104ec4f58a568ebe64487ce7b427f7bab3a",
     "signatureAlgo": "ed25519",
-    "publicKey": "570adb6d49117211186dde740cf85ab80651f7b5eb6eeb41360837e7c3048a56",
-    "signature": "5bfa813f96e882c65655c78af33a7760724fdc681092be04dee086a057423fa9c57c1e092c97f85e9c22cfdc1f118cbf1559c824025334cc9b3231ae68e97207",
+    "publicKey": "a48627587e54588d914fdd1e1413024ce7006c4a21c5e853f0ce74a40e6e7fca",
+    "signature": "749d209160747aad11ff46b2663cceee305f03cfaf31b7aa9ddd532a4e1ceca3f7f82d43466aa948cf85e5419fecdec806e8f87f4284ef31df5449f5ed6a9601",
     "seedDerivation": "sha256(gitCommit + ':ruflo-witness/v1')"
   }
 }

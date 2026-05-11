@@ -185,13 +185,88 @@ export const agentdbPatternSearch: MCPTool = {
       if (!vQuery.valid) return { results: [], error: vQuery.error };
       const query = validateString(params.query, 'query', 10_000);
       if (!query) return { results: [], error: 'query is required (non-empty string, max 10KB)' };
+      const topK = validatePositiveInt(params.topK, 5, MAX_TOP_K);
+      const minConfidence = validateScore(params.minConfidence, 0.3);
+
       const bridge = await getBridge();
-      const result = await bridge.bridgeSearchPatterns({
-        query,
-        topK: validatePositiveInt(params.topK, 5, MAX_TOP_K),
-        minConfidence: validateScore(params.minConfidence, 0.3),
-      });
-      return result ?? { results: [], controller: 'unavailable' };
+      const result = await bridge.bridgeSearchPatterns({ query, topK, minConfidence });
+      if (result && Array.isArray(result.results) && result.results.length > 0) {
+        return result;
+      }
+
+      // #1889 — symmetric fallback. pattern-store writes to the `pattern`
+      // namespace via memory_store when ReasoningBank is unavailable; the
+      // search path used to return an empty list with `controller: 'unavailable'`
+      // even though the user's pattern was sitting in that namespace. We now
+      // tier the fallback so freshly-written entries are findable before HNSW
+      // catches up:
+      //   1. Try semantic search via searchEntries (HNSW-backed)
+      //   2. If that returns 0, list the namespace and substring-match the query
+      //      against each entry's pattern text. Deterministic; survives
+      //      embedding-index latency and threshold tuning.
+      try {
+        const { searchEntries, listEntries } = await import('../memory/memory-initializer.js');
+
+        const parseEntry = (e: Record<string, unknown>): Record<string, unknown> | null => {
+          const raw = typeof e.content === 'string' ? e.content : (e as { value?: unknown }).value;
+          if (typeof raw !== 'string') return null;
+          try {
+            const parsed = JSON.parse(raw);
+            const confidence = typeof parsed.confidence === 'number' ? parsed.confidence : 0.8;
+            if (confidence < minConfidence) return null;
+            return {
+              patternId: e.key ?? e.id,
+              pattern: parsed.pattern,
+              type: parsed.type ?? 'general',
+              confidence,
+              score: typeof e.score === 'number' ? e.score : undefined,
+            };
+          } catch {
+            return null;
+          }
+        };
+
+        // Tier 1 — semantic
+        let results: Array<Record<string, unknown>> = [];
+        let tier: 'semantic' | 'substring' = 'semantic';
+        try {
+          const semantic = await searchEntries({ query, namespace: 'pattern', limit: topK });
+          results = (semantic?.results ?? [])
+            .map(parseEntry)
+            .filter((r): r is Record<string, unknown> => r !== null);
+        } catch { /* fall through to tier 2 */ }
+
+        // Tier 2 — substring scan (catches just-written entries before HNSW indexes them)
+        if (results.length === 0) {
+          tier = 'substring';
+          const all = await listEntries({ namespace: 'pattern', limit: 200 });
+          const qLower = query.toLowerCase();
+          const matched: Array<Record<string, unknown>> = [];
+          for (const e of (all?.entries ?? [])) {
+            const parsed = parseEntry(e as Record<string, unknown>);
+            if (!parsed) continue;
+            const text = typeof parsed.pattern === 'string' ? parsed.pattern.toLowerCase() : '';
+            if (text.includes(qLower)) matched.push(parsed);
+            if (matched.length >= topK) break;
+          }
+          results = matched;
+        }
+
+        // #1889 — controller label must match pattern-store's so the smoke
+        // round-trip sees both ends agree. The store reports
+        // `memory-store-fallback`; we use the same name + a `tier` field
+        // to expose which sub-strategy fired.
+        return {
+          results,
+          controller: 'memory-store-fallback',
+          tier,
+          note: result
+            ? `ReasoningBank returned 0 results; tier=${tier} from pattern namespace.`
+            : `ReasoningBank controller unavailable; tier=${tier} from pattern namespace.`,
+        };
+      } catch (fallbackErr) {
+        return { results: [], controller: 'unavailable', fallbackError: sanitizeError(fallbackErr) };
+      }
     } catch (error) {
       return { results: [], error: sanitizeError(error) };
     }
