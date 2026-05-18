@@ -168,6 +168,69 @@ export function ndcgAtK(
 }
 
 /**
+ * Compare a ranking against judgements across MULTIPLE k values in
+ * one pass. Standard benchmarking pattern — `recall@1 / 5 / 10` plus
+ * `nDCG@1 / 5 / 10` plus MRR all in a single call. Cheaper than
+ * calling each metric N times.
+ *
+ * Returns:
+ *   {
+ *     recall:   { 1: number, 5: number, 10: number, ... },
+ *     ndcg:     { 1: number, 5: number, 10: number, ... },
+ *     precision:{ 1: number, 5: number, 10: number, ... },
+ *     mrr: number,
+ *   }
+ */
+export interface RankingComparison {
+  readonly recall: Readonly<Record<number, number>>;
+  readonly precision: Readonly<Record<number, number>>;
+  readonly ndcg: Readonly<Record<number, number>>;
+  readonly mrr: number;
+}
+
+export function compareRankings(
+  retrieved: ReadonlyArray<string>,
+  judgements: RelevanceSet | GradedRelevance,
+  ks: ReadonlyArray<number>,
+): RankingComparison {
+  // Coerce judgements into a usable form for both binary + graded paths.
+  let relSet: Set<string>;
+  let graded: GradedRelevance;
+  if (judgements instanceof Set) {
+    relSet = judgements as Set<string>;
+    const m = new Map<string, number>();
+    for (const id of relSet) m.set(id, 1);
+    graded = m;
+  } else if (Array.isArray(judgements)) {
+    relSet = new Set(judgements as ReadonlyArray<string>);
+    const m = new Map<string, number>();
+    for (const id of relSet) m.set(id, 1);
+    graded = m;
+  } else {
+    graded = judgements as GradedRelevance;
+    relSet = new Set<string>();
+    if (graded instanceof Map) {
+      for (const [id, g] of graded) if (g > 0) relSet.add(id);
+    } else {
+      for (const [id, g] of Object.entries(graded as Record<string, number>)) {
+        if (g > 0) relSet.add(id);
+      }
+    }
+  }
+
+  const recall: Record<number, number> = {};
+  const precision: Record<number, number> = {};
+  const ndcg: Record<number, number> = {};
+  for (const k of ks) {
+    recall[k] = recallAtK(retrieved, relSet, k);
+    precision[k] = precisionAtK(retrieved, relSet, k);
+    ndcg[k] = ndcgAtK(retrieved, graded, k);
+  }
+  const mrr = reciprocalRank(retrieved, relSet);
+  return { recall, precision, ndcg, mrr };
+}
+
+/**
  * Convenience: roll up a metric over a query set (mean across queries).
  * Skips queries with empty relevant sets (no signal).
  */

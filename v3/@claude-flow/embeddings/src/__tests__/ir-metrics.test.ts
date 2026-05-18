@@ -14,6 +14,7 @@ import {
   dcgAtK,
   idcgAtK,
   ndcgAtK,
+  compareRankings,
 } from '../ir-metrics.js';
 
 describe('recallAtK', () => {
@@ -158,5 +159,55 @@ describe('ndcgAtK', () => {
     // Manufacture a pathological case — retrieved=[unknown], grades=[a:1].
     // DCG=0, IDCG=1 → nDCG=0 (not negative).
     expect(ndcgAtK(['unknown'], { a: 1 }, 1)).toBe(0);
+  });
+});
+
+describe('compareRankings', () => {
+  it('computes recall/precision/ndcg at all requested k values + MRR in one pass', () => {
+    // retrieved = [a, b, x, y, c] — relevant = {a, b, c}
+    // At k=1: recall = 1/3, precision = 1
+    // At k=3: recall = 2/3, precision = 2/3
+    // At k=5: recall = 3/3, precision = 3/5
+    // MRR = 1 (first item is relevant)
+    const cmp = compareRankings(
+      ['a', 'b', 'x', 'y', 'c'],
+      new Set(['a', 'b', 'c']),
+      [1, 3, 5],
+    );
+    expect(cmp.recall[1]).toBeCloseTo(1 / 3, 6);
+    expect(cmp.recall[3]).toBeCloseTo(2 / 3, 6);
+    expect(cmp.recall[5]).toBeCloseTo(1, 6);
+    expect(cmp.precision[1]).toBeCloseTo(1, 6);
+    expect(cmp.precision[3]).toBeCloseTo(2 / 3, 6);
+    expect(cmp.precision[5]).toBeCloseTo(3 / 5, 6);
+    expect(cmp.mrr).toBeCloseTo(1, 6);
+    // All three k values should produce a valid nDCG in [0, 1].
+    for (const k of [1, 3, 5]) {
+      expect(cmp.ndcg[k]).toBeGreaterThanOrEqual(0);
+      expect(cmp.ndcg[k]).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it('accepts graded judgements (Map)', () => {
+    const cmp = compareRankings(
+      ['a', 'b', 'c'],
+      new Map([['a', 3], ['b', 2], ['c', 1]]),
+      [3],
+    );
+    expect(cmp.ndcg[3]).toBeCloseTo(1, 6); // ideal order → 1.0
+    expect(cmp.recall[3]).toBeCloseTo(1, 6);
+  });
+
+  it('accepts graded judgements (Record)', () => {
+    const cmp = compareRankings(['a'], { a: 1 }, [1]);
+    expect(cmp.recall[1]).toBe(1);
+  });
+
+  it('returns 0 for all metrics on empty judgements', () => {
+    const cmp = compareRankings(['a', 'b'], new Set<string>(), [1, 2]);
+    expect(cmp.recall[1]).toBe(0);
+    expect(cmp.recall[2]).toBe(0);
+    expect(cmp.ndcg[1]).toBe(0);
+    expect(cmp.mrr).toBe(0);
   });
 });

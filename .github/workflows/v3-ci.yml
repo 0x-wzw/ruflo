@@ -479,6 +479,38 @@ jobs:
         shell: bash
         run: node scripts/smoke-embeddings-diskann.mjs
 
+  rag-topology-benchmark:
+    # ADR-121 Phase 14 — Algorithm-level benchmark of the 4 underlying
+    # RAG fusion primitives (plain top-k / MMR / RRF / HyDE-avg) on
+    # 4 hand-crafted vector topologies designed to expose each
+    # primitive's strength:
+    #   easy           — clean clusters, everyone wins
+    #   duplicate-heavy — exposes MMR via subtopic-coverage metric
+    #   multi-intent   — exposes RRF via intent-boundary preservation
+    #   q-a-gap        — exposes HyDE via centroid-finding
+    # No MCP layer, no mock provider — pure algorithmic comparison.
+    # CI pass criterion: every cell produces a finite metric in [0,1].
+    name: rag topology benchmark (#2036, ADR-121 Phase 14)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build embeddings
+        run: |
+          cd v3/@claude-flow/embeddings
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npx tsc -p tsconfig.json
+
+      - name: Run RAG topology benchmark
+        shell: bash
+        run: node scripts/benchmark-rag-topology-suite.mjs
+
   rag-primitive-benchmark:
     # ADR-121 Phase 13 — End-to-end benchmark of all 5 RAG primitives
     # (search_text, _batch, _diverse, _ensemble, _hyde) on a controlled

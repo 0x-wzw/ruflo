@@ -157,8 +157,10 @@ export {
   idcgAtK,
   ndcgAtK,
   meanMetric,
+  compareRankings,
   type RelevanceSet,
   type GradedRelevance,
+  type RankingComparison,
 } from './ir-metrics.js';
 
 export type { AutoEmbeddingConfig } from './embedding-service.js';
