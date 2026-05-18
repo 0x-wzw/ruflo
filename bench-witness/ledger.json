@@ -56,8 +56,8 @@
         }
       },
       "contentHash": "8958ef94a2a84be6202f808915a1a00bbd8ec245fc49010909df6f67fe41733a",
-      "signature": "07718e51876e2508fb07cf4a9483d2b549a520497fd1336826bb07d90fc35820d1f4a177677a13cc9476cc8b58eecbb40727b84696af9b7784e7d3f698b79c02",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "0da3c1d8fe1d26a154d6968fe5553b9bf9bc3e491440617fdaabe0f859a50587ba7e07404c9ca77989bf528b686081932cc337160622fb8e878a9380fbc3150c",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": null,
       "sequence": 1
@@ -147,8 +147,8 @@
         }
       },
       "contentHash": "b87db0cd2cbf469265542ca659c48621cb2d81bb63a3c070029a8134cfc016a5",
-      "signature": "fc5818ba4de1721099b0143eb090992ec41bd59a177ca461a991971a7444543d1c6dc8f3c1dc07fbe4611ce6d4ffdffbe1730120a7839aafc2620cdd2a4ae70f",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "e725f1542cd0e91166f0a669112bf06137b87e6e8e180a65a9a8c8a6e87af2b1a3e0288951cf9522e2f7fbfd5f6eec889e0af81566f32078939fbaff9fe76707",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "8958ef94a2a84be6202f808915a1a00bbd8ec245fc49010909df6f67fe41733a",
       "sequence": 2
@@ -226,8 +226,8 @@
         }
       },
       "contentHash": "3e2009dbff5f0a5bd8d0e3139f6cd92f612ec4f23b201572d39ad51704822bde",
-      "signature": "7b891aafbf43f976a6e6530d457d6e1e75d6c607bf0286159221a76f078d42eb7667f43935054441c524f8d2c49f5d78f626be6cd36b29dc9fc925b091d29b0f",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "cb4272e5297ab6671d1b93c01e3756eaa2830d54772e19e57d3d3705167c1880b1c8e7e4ae541d34353c823549186b19fd388388078c247739f5f6bf468c5b00",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "b87db0cd2cbf469265542ca659c48621cb2d81bb63a3c070029a8134cfc016a5",
       "sequence": 3
@@ -299,8 +299,8 @@
         }
       },
       "contentHash": "e96537707e609ca410c2c3d71543633edbcf8d90d782e34c81f007cbd1013873",
-      "signature": "89c4ebefb0f3f1b3cc1021664cf16e83ba752717cdddcfce350639a5794093f07482804133025cb94e967a5599dde17e41a62238d82f2e69f69d526e7ca99b0a",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "61ea286093d4d4688d66dae94d008b4eb945beaa9bfab4c7f439b5a649b3ea63a6f7746362a44ce8c1d5505337d5a2b77789e57e4772118a4e41ce3c8c188d02",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "3e2009dbff5f0a5bd8d0e3139f6cd92f612ec4f23b201572d39ad51704822bde",
       "sequence": 4
@@ -339,8 +339,8 @@
         }
       },
       "contentHash": "9c9bb28beee9847df12c93646bdadb8a99906dbabc8c325aa9b79c4ccf5bb075",
-      "signature": "8ffe7472b3a71c1861aac57832b2b4896dac0443e7bcc2ea998e50f99761d056ef373f9e1384366787b19647a780854f6ad6ed838b6e1f9d332e2830229a2803",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "19c6895c816639fbca99914cec90ea51c63d354624e1fa3bffb62bc6c204430b31c5015964ca3042a49c0edee0cb38f3a210119db076a0b3aaa8ccf8d7fe2702",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "e96537707e609ca410c2c3d71543633edbcf8d90d782e34c81f007cbd1013873",
       "sequence": 5
@@ -389,8 +389,8 @@
         }
       },
       "contentHash": "c1699495a56655bd01175137c5ef65af576085ecad8da4b63e1f32e42d2a0088",
-      "signature": "831fd4163c9c755603e184806c33eaafa474775802839ab91ef2af91a48aaa139c8c0431f6316901d01460c0c4f18cec00305da3d5e1e94cd2c0fe645a2c7c0f",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "78649a076f423aa4c3184f10ea54418665c8397d80d4d3791aa96f8b7be68b28d3e6f970b8f70098a04229eb5ffa94f85920ef1034cad02a472936bae3d70e0f",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "9c9bb28beee9847df12c93646bdadb8a99906dbabc8c325aa9b79c4ccf5bb075",
       "sequence": 6
@@ -479,8 +479,8 @@
         }
       },
       "contentHash": "9ae4548b749147abce9839b22d0ea8bfb99c01aa3b32d0d563046d975c9a707a",
-      "signature": "d2eb2c992e3a51995ae7886c24172fcd3a31e9c959f6632f0008c7fd07028268c202f900504330eafd1ae1d22412c03137be0e212c1411d4e2bd37c969ce6502",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "581468332bfcbd6b3254a2d070633fe1a86bff522689299da4e3622f9c9cff49a224240a99bd8447b72bf77958bbb36f334d0ca302a8d6c04ddc7e8635d57405",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "c1699495a56655bd01175137c5ef65af576085ecad8da4b63e1f32e42d2a0088",
       "sequence": 7
@@ -529,8 +529,8 @@
         }
       },
       "contentHash": "c750eb49e9cef227d6a996a9c9aeee9ac3028e7b85b9a6d75b0c6faeab2c978d",
-      "signature": "71d17c536dc904bca9a86e14ed3b3c8f47194e38d2a90c1c5f6499758b6d85990c6c0bb50ef900c0d72959be6eb90ce21979820e3f51862b02229fcb7506df01",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "af9ca4275df993a636142873a93ba5af1cd36676f267b90f8542d48365c3331cd148428a073889bf53531bd8c711cb49dfc54eb0193d1d1e17aefdc79c187c00",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "9ae4548b749147abce9839b22d0ea8bfb99c01aa3b32d0d563046d975c9a707a",
       "sequence": 8
@@ -629,11 +629,154 @@
         }
       },
       "contentHash": "574a9d6796c35aed142dafa9994ad74c4f3c3e87407b3ccab6a874537a512d2b",
-      "signature": "3e623411bdb1fd203b3870a5464fd1b0e4922c059579627ce37cf1cb5c963d02dff2755a9e35056c9aefa2024cff30853129cc9a813a41fd7a0f1215385bf107",
-      "publicKey": "302a300506032b65700321003a2b0336c3c90e3059cf5fea42c4a3651badeafdb54af68049d0c79600d3a333",
+      "signature": "9d119dfc6bec4d084dccb38229fc48c4e58df350a758489a29567776fef9bdd883328d76c3d8f99ff8060b1185ea18e9ac22d46a44be284d11e7501a4157d309",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
       "signatureAlgorithm": "ed25519",
       "prevContentHash": "c750eb49e9cef227d6a996a9c9aeee9ac3028e7b85b9a6d75b0c6faeab2c978d",
       "sequence": 9
+    },
+    {
+      "benchmark": "rag-trend-visualization",
+      "timestamp": "2026-05-18T01:54:42.735Z",
+      "commit": "3fe81e47d40eb135deaea5e2f96058544cbf7ffe",
+      "model": "ledger-derived",
+      "corpus": {
+        "id": "435eb5e466c61076586e3fd316676f7abb3efc5de1b43b6ff57b9ce985d373ba",
+        "size": 7
+      },
+      "queries": {
+        "id": "7cc10dbe481dbad00756bea27a4cdad4a195024176a689fc5cdba814fd44b0d5",
+        "count": 9
+      },
+      "results": {
+        "__chain": {
+          "prevContentHash": "574a9d6796c35aed142dafa9994ad74c4f3c3e87407b3ccab6a874537a512d2b",
+          "sequence": 10
+        },
+        "originalContentHash": "141ded929d85859ea8aec144fd54fa337dbfdfd82bc4fb80bc3364ae5f58525a",
+        "originalSignature": "34a162e1d29bd8205cc71a6a103a4e53b5b1acd1871464af8820aa8636ba6f7a913155ebd988f3d368cfc184545ed7c35b8f8e89a73f8cd2be1d0fb43e512909",
+        "originalPublicKey": "302a300506032b6570032100792919585e27493aba5d008a05aeb60588e31ce759d33b579c2d50618dad07f2",
+        "results": {
+          "trackedCount": 7,
+          "withDataCount": 0,
+          "skippedCount": 7,
+          "driftFailures": 0,
+          "allPassed": true,
+          "trends": [
+            {
+              "benchmark": "rag-real-text",
+              "metricPath": "results.results.compound.recallAt5",
+              "direction": "higher",
+              "sparkline": "▄",
+              "sampleCount": 1,
+              "latestValue": 0.9666666666666667,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            },
+            {
+              "benchmark": "rag-real-text",
+              "metricPath": "results.results.hyde.recallAt5",
+              "direction": "higher",
+              "sparkline": "▄",
+              "sampleCount": 1,
+              "latestValue": 0.9666666666666667,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            },
+            {
+              "benchmark": "rag-adaptive-router",
+              "metricPath": "results.results.accuracy",
+              "direction": "higher",
+              "sparkline": "▄",
+              "sampleCount": 1,
+              "latestValue": 1,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            },
+            {
+              "benchmark": "rag-router-ablation",
+              "metricPath": "results.results.adaptive.meanRecallAt5",
+              "direction": "higher",
+              "sparkline": "▄",
+              "sampleCount": 1,
+              "latestValue": 0.8833333333333334,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            },
+            {
+              "benchmark": "rag-lazy-router",
+              "metricPath": "results.results.embedsSavedPercent",
+              "direction": "higher",
+              "sparkline": "▄",
+              "sampleCount": 1,
+              "latestValue": 24.324324324324326,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            },
+            {
+              "benchmark": "rag-cached-router",
+              "metricPath": "results.results.cacheStats.hitRate",
+              "direction": "higher",
+              "sparkline": "▄▄",
+              "sampleCount": 2,
+              "latestValue": 0.7407407407407407,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            },
+            {
+              "benchmark": "rag-cached-router",
+              "metricPath": "results.results.embedsSavedPercent",
+              "direction": "higher",
+              "sparkline": "▄▄",
+              "sampleCount": 2,
+              "latestValue": 74.07407407407408,
+              "drift": {
+                "earlyMean": 0,
+                "lateMean": 0,
+                "drift": 0,
+                "passed": true,
+                "skipped": true
+              }
+            }
+          ]
+        }
+      },
+      "contentHash": "7b4ed25b40887294cca7850018af581f87f73ee27cc452ae698aab0d90fcda3d",
+      "signature": "9750d402a5195dca407e0a6b9d19d9bfd8af911be9bdf2333e412524f5fd786b5e1af2122e66e33dc388224f14ce2f7cdaf3b0261b1f239850380af426f53508",
+      "publicKey": "302a300506032b6570032100c7ad1c50ec249b4ef0fd7cb4f2f9705842befd14a86db1fe640ab98871c103d3",
+      "signatureAlgorithm": "ed25519",
+      "prevContentHash": "574a9d6796c35aed142dafa9994ad74c4f3c3e87407b3ccab6a874537a512d2b",
+      "sequence": 10
     }
   ]
 }

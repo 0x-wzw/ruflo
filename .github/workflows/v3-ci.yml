@@ -667,6 +667,59 @@ jobs:
           name: rag-router-ablation-witness
           path: bench-witness/rag-router-ablation-*.json
 
+  rag-trend-visualization:
+    # ADR-121 Phase 23 — Trend visualization + drift detection.
+    # Catches "death by a thousand cuts" — gradual cumulative drift
+    # that every single-step regression check would have missed.
+    # Renders ASCII sparklines for at-a-glance dashboard view.
+    # Witness-signed report uploaded as CI artifact.
+    name: rag trend visualization + drift detection (#2036, ADR-121 Phase 23)
+    runs-on: ubuntu-latest
+    needs: [rag-witness-ledger]
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build embeddings
+        run: |
+          cd v3/@claude-flow/embeddings
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npx tsc -p tsconfig.json
+
+      - name: Download chained ledger artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rag-benchmark-ledger
+          path: bench-witness
+
+      - name: Render trend dashboard + drift check (witness-signed)
+        shell: bash
+        run: node scripts/visualize-benchmark-trends.mjs
+
+      - name: Verify trend witness (independent process)
+        shell: bash
+        run: |
+          FILE=$(ls -t bench-witness/rag-trend-visualization-*.json | head -1)
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const { verify } = await import('./v3/@claude-flow/embeddings/dist/witness.js');
+            const m = JSON.parse(fs.readFileSync('$FILE', 'utf8'));
+            if (!verify(m.witness)) { console.error('VERIFY FAILED'); process.exit(1); }
+            console.log('Trend visualization witness verifies OK:', m.witness.contentHash);
+          "
+
+      - name: Upload trend report as CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-trend-visualization-witness
+          path: bench-witness/rag-trend-visualization-*.json
+
   rag-regression-check:
     # ADR-121 Phase 22 — Performance regression detection over the chain.
     # The witness ledger has historical benchmark numbers; this guard

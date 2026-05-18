@@ -228,6 +228,19 @@ export {
   type CompoundIntentTrace,
 } from './compound-retrieval.js';
 
+// ADR-121 Phase 23 — Trend visualization + drift detection (BEYOND SOTA).
+// Catches the "death by a thousand cuts" pattern where every commit
+// drops 1% but cumulative drift is 30%. Renders sparklines for
+// CI/PR dashboards.
+export {
+  renderSparkline,
+  detectDrift,
+  summarizeBenchmarkTrend,
+  type DriftDetectionOptions,
+  type DriftDetectionResult,
+  type BenchmarkTrendSummary,
+} from './ledger-trends.js';
+
 // ADR-121 Phase 22 — Ledger analyzer + regression detection.
 // Uses the Phase 18 chained ledger to detect performance regressions
 // on every new benchmark run. The chain becomes a self-auditing
