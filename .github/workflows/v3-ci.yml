@@ -667,6 +667,59 @@ jobs:
           name: rag-router-ablation-witness
           path: bench-witness/rag-router-ablation-*.json
 
+  rag-cli-cosign:
+    # ADR-121 Phase 26 — `ruflo benchmark cosign` CLI subcommand.
+    # Completes the third-party-verifier workflow: vendor publishes
+    # ledger, third party co-signs, downstream checks at threshold N.
+    # Pass criterion: cosign single + --all + --key persistence all
+    # work, contentHash unchanged, verify@threshold=2 passes after
+    # --all. Witness-signed capability benchmark uploaded as artifact.
+    name: ruflo benchmark cosign CLI smoke + witness (#2036, ADR-121 Phase 26)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build embeddings + CLI
+        run: |
+          cd v3/@claude-flow/embeddings
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npx tsc -p tsconfig.json
+          cd ../cli
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npx tsc --build --force tsconfig.json
+
+      - name: Smoke — benchmark cosign CLI contract
+        shell: bash
+        run: node scripts/smoke-cli-benchmark-cosign.mjs
+
+      - name: Capability benchmark (witness-signed)
+        shell: bash
+        run: node scripts/benchmark-rag-cli-cosign.mjs
+
+      - name: Verify capability witness (independent process)
+        shell: bash
+        run: |
+          FILE=$(ls -t bench-witness/rag-cli-cosign-capability-*.json | head -1)
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const { verify } = await import('./v3/@claude-flow/embeddings/dist/witness.js');
+            const m = JSON.parse(fs.readFileSync('$FILE', 'utf8'));
+            if (!verify(m.witness)) { console.error('VERIFY FAILED'); process.exit(1); }
+            console.log('Cosign CLI capability witness verifies OK:', m.witness.contentHash);
+          "
+
+      - name: Upload witness as CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-cli-cosign-capability-witness
+          path: bench-witness/rag-cli-cosign-capability-*.json
+
   rag-cli-verify:
     # ADR-121 Phase 25 — `ruflo benchmark verify` CLI subcommand smoke.
     # Drives the consumer-facing verification command against the

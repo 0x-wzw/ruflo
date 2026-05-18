@@ -477,6 +477,8 @@ const allCommand: Command = {
 
 // ADR-121 Phase 25 — `benchmark verify` for the chained witness ledger.
 import { benchmarkVerifyCommand } from './benchmark-verify.js';
+// ADR-121 Phase 26 — `benchmark cosign` for M-of-N third-party attestation.
+import { benchmarkCosignCommand } from './benchmark-cosign.js';
 
 export const benchmarkCommand: Command = {
   name: 'benchmark',
@@ -487,6 +489,7 @@ export const benchmarkCommand: Command = {
     memoryCommand,
     allCommand,
     benchmarkVerifyCommand,
+    benchmarkCosignCommand,
   ],
   examples: [
     { command: 'claude-flow benchmark pretrain', description: 'Benchmark pre-training system' },
