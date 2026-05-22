@@ -1,0 +1,72 @@
+{
+  "name": "@ruflo/plugin-nexys-bridge",
+  "version": "1.0.0-alpha.1",
+  "description": "Nexys Bridge Plugin for Ruflo — bridges agent orchestration to Python-based frameworks (NecroSwarm, NeuroSwarm, VoidTether, Capital-Sentience) via JSON-RPC over child process stdio",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./plugin": {
+      "import": "./dist/plugin.js",
+      "types": "./dist/plugin.d.ts"
+    },
+    "./protocol": {
+      "import": "./dist/protocol.js",
+      "types": "./dist/protocol.d.ts"
+    },
+    "./mcp": {
+      "import": "./dist/mcp-tools.js",
+      "types": "./dist/mcp-tools.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "ruflo",
+    "nexys",
+    "plugin",
+    "json-rpc",
+    "agent-bridge",
+    "necroswarm",
+    "voidtether",
+    "capital-sentience",
+    "neuroswarm",
+    "claude-flow"
+  ],
+  "author": "Ruflo Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/ruflo-nexys.git",
+    "directory": "v3/plugins/nexys-bridge"
+  },
+  "bugs": {
+    "url": "https://github.com/ruvnet/ruflo-nexys/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "typescript": "^5.9.3",
+    "vitest": "^1.6.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "v1alpha"
+  }
+}
