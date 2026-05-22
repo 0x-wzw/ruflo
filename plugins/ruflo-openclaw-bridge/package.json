@@ -1,0 +1,48 @@
+{
+  "name": "ruflo-openclaw-bridge",
+  "version": "1.0.0",
+  "description": "Bridge between OpenClaw agent runtime and ruflo orchestration - maps sessions_spawn/subagents to ruflo swarm/agent commands",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ruflo": "^1.0.0",
+    "ws": "^8.16.0"
+  },
+  "ruflo": {
+    "plugin": {
+      "id": "openclaw-bridge",
+      "name": "OpenClaw Bridge",
+      "description": "Bidirectional bridge between OpenClaw runtime and ruflo orchestration",
+      "version": "1.0.0",
+      "author": "0x-wzw",
+      "tags": ["openclaw", "bridge", "integration", "orchestration"],
+      "entry": "src/index.ts",
+      "commands": [
+        {
+          "name": "openclaw-spawn",
+          "description": "Spawn agent via OpenClaw sessions_spawn mapped to ruflo swarm",
+          "handler": "spawnAgent"
+        },
+        {
+          "name": "openclaw-list",
+          "description": "List active OpenClaw sessions as ruflo agents",
+          "handler": "listAgents"
+        },
+        {
+          "name": "openclaw-send",
+          "description": "Send message to OpenClaw session via ruflo",
+          "handler": "sendMessage"
+        },
+        {
+          "name": "openclaw-kill",
+          "description": "Kill OpenClaw session mapped to ruflo agent termination",
+          "handler": "killAgent"
+        }
+      ]
+    }
+  }
+}
