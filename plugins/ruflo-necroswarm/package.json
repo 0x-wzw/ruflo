@@ -1,0 +1,47 @@
+{
+  "name": "ruflo-necroswarm",
+  "version": "1.0.0",
+  "description": "NecroSwarm workforce coordination adapter for ruflo - swarm management, task decomposition, worker pools",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ruflo": "^1.0.0"
+  },
+  "ruflo": {
+    "plugin": {
+      "id": "necroswarm",
+      "name": "NecroSwarm",
+      "description": "Workforce coordination and swarm management",
+      "version": "1.0.0",
+      "author": "0x-wzw",
+      "tags": ["swarm", "coordination", "workers"],
+      "entry": "src/index.ts",
+      "commands": [
+        {
+          "name": "swarm-init",
+          "description": "Initialize a new swarm with worker pool",
+          "handler": "swarmInit"
+        },
+        {
+          "name": "swarm-deploy",
+          "description": "Deploy task to swarm workers",
+          "handler": "swarmDeploy"
+        },
+        {
+          "name": "swarm-status",
+          "description": "Get swarm worker pool status",
+          "handler": "swarmStatus"
+        },
+        {
+          "name": "swarm-scale",
+          "description": "Scale worker pool up or down",
+          "handler": "swarmScale"
+        }
+      ]
+    }
+  }
+}

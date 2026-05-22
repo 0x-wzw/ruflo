@@ -1,0 +1,46 @@
+{
+  "name": "ruflo-0x-wzw-core",
+  "version": "1.0.0",
+  "description": "Meta-plugin that loads all 0x-wzw adapter frameworks into ruflo",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ruflo": "^1.0.0"
+  },
+  "peerDependencies": {
+    "ruflo-necroswarm": "^1.0.0",
+    "ruflo-neuroswarm": "^1.0.0",
+    "ruflo-obliviarch": "^1.0.0",
+    "ruflo-voidtether": "^1.0.0",
+    "ruflo-openclaw": "^1.0.0",
+    "ruflo-memevolve": "^1.0.0",
+    "ruflo-detret": "^1.0.0"
+  },
+  "ruflo": {
+    "plugin": {
+      "id": "0x-wzw-core",
+      "name": "0x-wzw Core",
+      "description": "Unified adapter platform for 7 agentic frameworks",
+      "version": "1.0.0",
+      "author": "0x-wzw",
+      "tags": ["adapter", "orchestration", "multi-agent"],
+      "entry": "src/index.ts",
+      "commands": [
+        {
+          "name": "0x-wzw-init",
+          "description": "Initialize all 0x-wzw adapter frameworks",
+          "handler": "init"
+        },
+        {
+          "name": "0x-wzw-status",
+          "description": "Check status of all adapter frameworks",
+          "handler": "status"
+        }
+      ]
+    }
+  }
+}
