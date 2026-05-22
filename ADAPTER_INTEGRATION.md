@@ -180,8 +180,37 @@ Your fork adds these unique capabilities:
 
 Create the first plugin scaffold (`ruflo-necroswarm`) to validate the adapter pattern works within ruflo's plugin system.
 
+## OpenClaw Integration
+
+OctoberBot (OpenClaw agent) connects to this ruflo fork through:
+- **Skill**: `skills/ruflo/SKILL.md` - RuFlo context for agent
+- **Workspace**: `/home/ubuntu/.openclaw/workspace/z-ruflo` - Local clone
+- **Fork**: `0x-wzw/ruflo` - GitHub fork for PRs
+
+### Integration Points
+| OpenClaw Feature | RuFlo Equivalent | Status |
+|-----------------|------------------|--------|
+| `sessions_spawn` | `ruflo agent spawn` | ⚪ Planned |
+| `subagents` | `ruflo swarm` | ⚪ Planned |
+| Memory (MEMORY.md) | `ruflo-obliviarch` | ⚪ Planned |
+| Skills system | ruflo plugins | 🟡 In Progress |
+| Heartbeat/cron | `ruflo-loop-workers` | ⚪ Planned |
+
+### Running RuFlo from OctoberBot
+```bash
+# Initialize ruflo in a project
+cd /path/to/project && npx ruflo init
+
+# Install a plugin
+npx ruflo plugin install ruflo-necroswarm
+
+# Start swarm
+npx ruflo swarm init
+```
+
 ---
 
 **Branch**: `z/adapter-integration`  
 **Fork**: `https://github.com/0x-wzw/ruflo`  
+**Local**: `/home/ubuntu/.openclaw/workspace/z-ruflo`  
 **Status**: Planning complete, ready for implementation
