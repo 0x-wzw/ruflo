@@ -1,0 +1,42 @@
+{
+  "name": "ruflo-neuroswarm",
+  "version": "1.0.0",
+  "description": "NeuroSwarm dual-phase adapter for ruflo - Brain plans, Swarm executes. Port of NeuroWeaver from unified_platform.",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ruflo": "^1.0.0"
+  },
+  "ruflo": {
+    "plugin": {
+      "id": "neuroswarm",
+      "name": "NeuroSwarm",
+      "description": "Dual-phase orchestration: Brain plans, Swarm executes",
+      "version": "1.0.0",
+      "author": "0x-wzw",
+      "tags": ["brain", "swarm", "dual-phase", "planning"],
+      "entry": "src/index.ts",
+      "commands": [
+        {
+          "name": "brain-activate",
+          "description": "Activate brain phase for strategic planning",
+          "handler": "brainActivate"
+        },
+        {
+          "name": "dual-phase",
+          "description": "Execute brain plan through swarm",
+          "handler": "dualPhase"
+        },
+        {
+          "name": "brain-status",
+          "description": "Get brain phase status",
+          "handler": "brainStatus"
+        }
+      ]
+    }
+  }
+}

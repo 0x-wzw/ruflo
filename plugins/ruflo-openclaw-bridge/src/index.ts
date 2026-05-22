@@ -140,9 +140,9 @@ export class OpenClawBridge implements RufloPlugin {
       session.status = 'completed';
       session.lastActivity = new Date();
       
-      // Sync memory if enabled
+      // Sync memory if enabled - compress with Obliviarch
       if (this.config.autoSyncMemory) {
-        this.syncSessionMemory(session);
+        this.syncSessionMemoryToObliviarch(session);
       }
       
       this.context?.log.info(`Session completed: ${session.sessionKey}`);
@@ -189,24 +189,33 @@ export class OpenClawBridge implements RufloPlugin {
   }
 
   /**
-   * Sync session memory to ruflo-obliviarch
+   * Sync session memory to Obliviarch for 500x compression
    */
-  private async syncSessionMemory(session: OpenClawSession): Promise<void> {
+  private async syncSessionMemoryToObliviarch(session: OpenClawSession): Promise<void> {
     try {
       // Fetch session transcript from OpenClaw
       const transcript = await this.fetchSessionTranscript(session.sessionKey);
       
-      // Compress with Obliviarch
-      this.context?.events.emit('memory.compress', {
-        agentId: session.rufloAgentId,
-        data: transcript,
-        source: 'openclaw-session'
-      });
+      // Send to Obliviarch for compression
+      const obliviarchResult = await this.context?.plugins.invoke('obliviarch', 'compress', [transcript, `--source=openclaw-session-${session.sessionKey}`]);
       
-      this.context?.log.info(`Memory synced for ${session.sessionKey}`);
+      if (obliviarchResult) {
+        this.context?.log.info(
+          `Memory synced for ${session.sessionKey}: ` +
+          `${obliviarchResult.originalSize} → ${obliviarchResult.compressedSize} chars ` +
+          `(${obliviarchResult.saved} reduction)`
+        );
+      }
     } catch (error) {
-      this.context?.log.error(`Memory sync failed: ${error}`);
+      this.context?.log.error(`Obliviarch sync failed: ${error}`);
     }
+  }
+
+  /**
+   * @deprecated Use syncSessionMemoryToObliviarch instead
+   */
+  private async syncSessionMemory(session: OpenClawSession): Promise<void> {
+    await this.syncSessionMemoryToObliviarch(session);
   }
 
   private async fetchSessionTranscript(sessionKey: string): Promise<string> {

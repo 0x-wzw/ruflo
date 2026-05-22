@@ -1,0 +1,47 @@
+{
+  "name": "ruflo-obliviarch",
+  "version": "1.0.0",
+  "description": "Obliviarch memory compression adapter for ruflo - 500x storage reduction through structured summarization",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ruflo": "^1.0.0"
+  },
+  "ruflo": {
+    "plugin": {
+      "id": "obliviarch",
+      "name": "Obliviarch",
+      "description": "500x memory compression with structured retrieval",
+      "version": "1.0.0",
+      "author": "0x-wzw",
+      "tags": ["memory", "compression", "storage", "optimization"],
+      "entry": "src/index.ts",
+      "commands": [
+        {
+          "name": "compress",
+          "description": "Compress memory content",
+          "handler": "compressMemory"
+        },
+        {
+          "name": "decompress",
+          "description": "Decompress memory entry",
+          "handler": "decompressMemory"
+        },
+        {
+          "name": "memory-stats",
+          "description": "Show compression statistics",
+          "handler": "getStats"
+        },
+        {
+          "name": "memory-search",
+          "description": "Search compressed memory",
+          "handler": "searchMemory"
+        }
+      ]
+    }
+  }
+}
